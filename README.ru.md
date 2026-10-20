@@ -51,6 +51,8 @@
 4. Правый ящик → проверить ход в пазу → левый ящик (если в 0.28 туго — левый в 0.20).
 5. Модули и аксессуары.
 
+Всё в одном файле Fusion: [`cad/all_in_one.f3d`](cad/all_in_one.f3d) — каждый набор отдельным компонентом, лишнее можно скрыть.
+
 Подробно: [печать](docs/printing.md), [сборка](docs/assembly.md), [проблемы](docs/known-issues.md), [аксессуары](docs/accessories.md).
 Наглядная схема сборки в 8 шагов: [`docs/assembly_visual_ru.html`](docs/assembly_visual_ru.html) (скачай и открой в браузере).
 

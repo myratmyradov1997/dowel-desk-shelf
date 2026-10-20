@@ -46,7 +46,7 @@ Gridfinity inserts for the drawers, cable and USB-hub holders, cable tray and wa
 | [`stl/05-front-rod`](stl/05-front-rod) | Plug holders (1/2/3 cables) and a USB-hub cradle under the front rod |
 | [`stl/06-storage`](stl/06-storage) | Cable tray under the deck, tool rail, headphone stand (experimental, heavy) |
 | [`stl/07-backlight`](stl/07-backlight) | LED rail for wall backlight + ESP32-C3 Super Mini box |
-| [`cad`](cad) | Fusion 360 archives (`.f3d`) of the assemblies and a STEP of the shelf |
+| [`cad`](cad) | Fusion 360 archives (`.f3d`) and a STEP of the shelf. **`all_in_one.f3d`** — everything in one document, one component per set (toggle visibility) |
 | [`source/fusion`](source/fusion) | Fusion 360 API scripts that generate everything (fully parametric) |
 | [`source/orca`](source/orca) | OrcaSlicer profiles (ABS, Ghost 6) and the CLI slicing helper |
 | [`docs`](docs) | [Printing](docs/printing.md) · [Assembly](docs/assembly.md) · [Known issues](docs/known-issues.md) · [Accessories](docs/accessories.md) |
