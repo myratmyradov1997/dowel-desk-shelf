@@ -1,0 +1,288 @@
+<title>Сборка DeskShelf</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column of numbered assembly steps, each = short text + a to-scale-ish workshop drawing. */
+:root{
+  --bg:#f3f4f2; --paper:#ffffff; --fg:#1f2529; --muted:#5d666c; --line:#c9cfd2;
+  --ash:#4a5763; --ash-soft:#dfe3e7; --blue:#1f4fd1; --blue-soft:#dbe4ff;
+  --wood:#c58d4f; --wood-soft:#ecd2b0; --ok:#1e7a46; --bad:#b4372b; --tape:#2a2a2a;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14181b; --paper:#1c2125; --fg:#e7ebee; --muted:#9aa4ab; --line:#333c42;
+  --ash:#9fb0bf; --ash-soft:#2a3239; --blue:#7f9fff; --blue-soft:#1d2a52;
+  --wood:#d9a466; --wood-soft:#4a3824; --ok:#53c285; --bad:#ef7d70; --tape:#e7ebee; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14181b; --paper:#1c2125; --fg:#e7ebee; --muted:#9aa4ab; --line:#333c42;
+  --ash:#9fb0bf; --ash-soft:#2a3239; --blue:#7f9fff; --blue-soft:#1d2a52;
+  --wood:#d9a466; --wood-soft:#4a3824; --ok:#53c285; --bad:#ef7d70; --tape:#e7ebee; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+header{display:grid;gap:10px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,5vw,38px);line-height:1.1;margin:0;text-wrap:balance}
+.lead{color:var(--muted);max-width:62ch;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid var(--wood);background:var(--wood-soft)}
+.sw.thin{width:11px;height:11px;border-style:dashed}
+.sw.ash{border-radius:3px;border-color:var(--ash);background:var(--ash-soft)}
+.sw.blue{border-radius:3px;border-color:var(--blue);background:var(--blue-soft)}
+section.step{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px clamp(16px,3vw,26px);display:grid;gap:14px}
+.head{display:flex;gap:14px;align-items:baseline}
+.n{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--blue);letter-spacing:.06em;flex:none}
+h2{font-family:var(--display);font-weight:500;font-size:clamp(18px,3vw,22px);margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0;max-width:66ch}
+ul{margin:0;padding-left:20px;max-width:66ch;display:grid;gap:4px}
+.when{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.fig{overflow-x:auto;border-radius:8px;background:var(--bg);padding:10px}
+.fig svg{display:block;width:100%;min-width:520px;height:auto}
+svg text{font-family:var(--body);fill:var(--fg);font-size:12px}
+svg .mono{font-family:var(--mono);font-size:11px}
+svg .muted{fill:var(--muted)}
+svg .blue{fill:var(--blue)} svg .ok{fill:var(--ok)} svg .bad{fill:var(--bad)}
+.leg{fill:var(--ash-soft);stroke:var(--ash);stroke-width:1.5}
+.rod{fill:var(--wood-soft);stroke:var(--wood);stroke-width:2}
+.rod.thin{stroke-dasharray:4 3}
+.tile{fill:var(--ash-soft);stroke:var(--ash);stroke-width:1.5}
+.acc{fill:var(--blue-soft);stroke:var(--blue);stroke-width:1.5}
+.tape{fill:var(--tape);opacity:.85}
+.dim{stroke:var(--muted);stroke-width:1;fill:none}
+.arrow{stroke:var(--blue);stroke-width:2;fill:none;marker-end:url(#ah)}
+.okl{stroke:var(--ok);stroke-width:2.5;fill:none}
+.badl{stroke:var(--bad);stroke-width:2.5;fill:none}
+.wax{fill:none;stroke:var(--ok);stroke-width:5;stroke-linecap:round;opacity:.55}
+.desk{stroke:var(--muted);stroke-width:2}
+.note{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+footer{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){section.step{transition:border-color .2s}section.step:hover{border-color:var(--ash)}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--blue)"/></marker>
+</defs></svg>
+
+<div class="wrap">
+<header>
+  <h1>Сборка полки на пяти прутках</h1>
+  <p class="lead">Восемь шагов, которые стоит сделать при сборке, чтобы ящики ходили ровно, а полка не шаталась. Рисунки схематичные, зазоры и изгибы показаны крупнее, чем на самом деле.</p>
+  <div class="legend">
+    <span><i class="sw"></i>хороший пруток ≈20.0–20.1 мм</span>
+    <span><i class="sw thin"></i>тонкий пруток ≈19.0 мм</span>
+    <span><i class="sw ash"></i>пепельные детали</span>
+    <span><i class="sw blue"></i>синие детали</span>
+  </div>
+</header>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 1</span><h2>Расставь прутки: тонкие на 2-е и 4-е места</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 260" role="img" aria-label="Вид сбоку на опору: пять прутков, хомуты на переднем и заднем">
+    <text x="20" y="22" class="muted">вид сбоку, слева — к тебе (перед), справа — стена</text>
+    <line x1="20" y1="232" x2="620" y2="232" class="desk"/>
+    <!-- leg profile: y -122..122 -> x 80..568 (2 px/mm), z 0..120 -> 232..64 (1.4 px/mm) -->
+    <polygon class="leg" points="80,232 80,221 94,221 94,78 114,64 534,64 554,78 554,221 568,221 568,232"/>
+    <rect x="148" y="138" width="352" height="75" rx="4" fill="var(--bg)" stroke="var(--ash)" stroke-width="1"/>
+    <text x="324" y="182" text-anchor="middle" class="muted">окно опоры</text>
+    <!-- tile -->
+    <rect class="tile" x="80" y="52" width="488" height="5"/>
+    <text x="324" y="44" text-anchor="middle" class="muted">плитка лежит на прутках сверху</text>
+    <!-- clamp ears on 1 and 5 -->
+    <rect x="106" y="54" width="36" height="20" fill="var(--ash)" opacity=".35"/>
+    <rect x="506" y="54" width="36" height="20" fill="var(--ash)" opacity=".35"/>
+    <!-- rods z=105 -> y=85 ; y positions -100,-50,0,50,100 -> x 124,224,324,424,524 -->
+    <circle class="rod" cx="124" cy="85" r="14"/><circle class="rod thin" cx="224" cy="86" r="13"/>
+    <circle class="rod" cx="324" cy="85" r="14"/><circle class="rod thin" cx="424" cy="86" r="13"/>
+    <circle class="rod" cx="524" cy="85" r="14"/>
+    <g class="mono" text-anchor="middle"><text x="124" y="89">1</text><text x="224" y="90">2</text><text x="324" y="89">3</text><text x="424" y="90">4</text><text x="524" y="89">5</text></g>
+    <!-- MagSafe cup in front of rod 1 -->
+    <rect class="acc" x="30" y="40" width="12" height="90" rx="3"/>
+    <line x1="42" y1="85" x2="110" y2="85" stroke="var(--blue)" stroke-width="3"/>
+    <text x="36" y="148" text-anchor="middle" class="blue">MagSafe</text>
+    <!-- callouts -->
+    <text x="124" y="252" text-anchor="middle" class="mono">хомут M3</text>
+    <text x="524" y="252" text-anchor="middle" class="mono">хомут M3</text>
+    <text x="324" y="252" text-anchor="middle" class="mono muted">средний</text>
+    <text x="224" y="118" text-anchor="middle" class="mono muted">тонкий</text>
+    <text x="424" y="118" text-anchor="middle" class="mono muted">тонкий</text>
+  </svg></div>
+  <ul>
+    <li><b>1, 3, 5</b>: три хороших прутка. На 1-м и 5-м стоят хомуты с винтами, они держат опоры на месте. Поэтому там нужны прутки, которые хомут реально зажмёт.</li>
+    <li><b>2 и 4</b>: тонкие. Хомутов там нет, прутки просто несут плитку.</li>
+    <li>Хомут сжимается максимум до ~19.6 мм, тонкий пруток 19.0 он не зажмёт, как ни тяни.</li>
+  </ul>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 2</span><h2>Подготовь прутки до сборки</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Пруток: шлифовка бугров, проверка кольцом, парафин">
+    <text x="20" y="22" class="muted">один пруток, вид сбоку</text>
+    <rect class="rod" x="40" y="60" width="560" height="34" rx="6"/>
+    <!-- bump -->
+    <path d="M300 60 q20 -10 40 0" fill="var(--wood-soft)" stroke="var(--bad)" stroke-width="2"/>
+    <text x="320" y="42" text-anchor="middle" class="bad">бугор → наждачка 180</text>
+    <!-- wax zone where inner leg slides -->
+    <line class="wax" x1="380" y1="98" x2="560" y2="98"/>
+    <text x="470" y="122" text-anchor="middle" class="ok">натереть свечкой (парафин)</text>
+    <text x="470" y="138" text-anchor="middle" class="muted mono">здесь едет внутренняя опора</text>
+    <!-- ring -->
+    <ellipse cx="140" cy="77" rx="9" ry="24" fill="none" stroke="var(--ash)" stroke-width="5"/>
+    <path class="arrow" d="M140 158 L 260 158"/>
+    <text x="140" y="180" text-anchor="middle" class="mono">кольцо D20.2 из пробника</text>
+    <text x="200" y="200" text-anchor="middle" class="muted">прогони по всему пруту: где застревает, там шкурить</text>
+    <!-- numbers -->
+    <text x="52" y="82" class="mono">1Л</text><text x="578" y="82" class="mono">1П</text>
+  </svg></div>
+  <ul>
+    <li><b>Бугры</b> сними наждачкой. Внутренняя опора должна проехать по пруту 20–33 см без заеданий.</li>
+    <li><b>Кольцо D20.2</b> из старого пробника прогони по каждому хорошему пруту.</li>
+    <li><b>Парафин</b>: натри обычной свечкой участки, по которым едет опора. Скользит заметно легче.</li>
+    <li><b>Номер</b> напиши карандашом на торцах: «1Л / 1П … 5Л / 5П». При разборке прутки встанут на те же места.</li>
+  </ul>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 3</span><h2>Найди горб и поверни пруток горбом вниз</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 250" role="img" aria-label="Кривой пруток: горб вверх поднимает плитку, горб вниз нет">
+    <g>
+      <text x="20" y="22" class="bad">✗ горбом вверх</text>
+      <path d="M40 92 Q 320 52 600 92" fill="none" stroke="var(--wood)" stroke-width="16" stroke-linecap="round"/>
+      <path d="M40 66 Q 320 56 600 66" class="tile" fill="none" stroke-width="6"/>
+      <text x="320" y="40" text-anchor="middle" class="bad">плитка встаёт «домиком» и качается</text>
+    </g>
+    <g transform="translate(0,120)">
+      <text x="20" y="22" class="ok">✓ горбом вниз</text>
+      <path d="M40 62 Q 320 102 600 62" fill="none" stroke="var(--wood)" stroke-width="16" stroke-linecap="round"/>
+      <rect class="tile" x="40" y="46" width="560" height="5"/>
+      <text x="320" y="118" text-anchor="middle" class="ok">плитка лежит на соседних прямых прутках, этот её не поднимает</text>
+    </g>
+  </svg></div>
+  <p>Как найти горб: положи пруток на ровный пол и покатай. Он остановится горбом вверх. Отметь эту сторону карандашом, а при сборке поверни её вниз. Если горб смотрит вбок, опоры встанут криво, и паз под ящик тоже.</p>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 4</span><h2>Тонкие прутки в крайних опорах: термоусадка или изолента</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 220" role="img" aria-label="Конец тонкого прутка в глухом гнезде крайней опоры с намоткой">
+    <text x="20" y="22" class="muted">разрез крайней опоры, вид сверху</text>
+    <!-- leg block -->
+    <rect class="leg" x="440" y="40" width="64" height="140"/>
+    <rect x="440" y="72" width="56" height="76" fill="var(--bg)" stroke="var(--ash)" stroke-width="1"/>
+    <text x="472" y="196" text-anchor="middle" class="mono muted">гнездо 20.4 · глухое · 14 мм</text>
+    <!-- thin rod -->
+    <rect class="rod thin" x="60" y="78" width="430" height="64" rx="4"/>
+    <!-- tape wraps -->
+    <rect class="tape" x="436" y="74" width="54" height="4"/><rect class="tape" x="436" y="142" width="54" height="4"/>
+    <g stroke="var(--fg)" stroke-width="1" opacity=".55"><line x1="440" y1="74" x2="440" y2="146"/><line x1="452" y1="74" x2="452" y2="146"/><line x1="464" y1="74" x2="464" y2="146"/><line x1="476" y1="74" x2="476" y2="146"/></g>
+    <path class="arrow" d="M380 56 L 436 72"/>
+    <text x="300" y="52" class="mono">4–5 витков (~15 мм)</text>
+    <text x="250" y="114" text-anchor="middle" class="muted">тонкий пруток 19.0</text>
+    <text x="300" y="176" class="muted">лучше клеевая термоусадка: изолента</text>
+    <text x="300" y="192" class="muted">под давлением со временем ползёт</text>
+  </svg></div>
+  <ul>
+    <li>Наматывай, пока пруток не войдёт в гнездо <b>с усилием</b>. Обычно 4–5 витков.</li>
+    <li>Ещё лучше <b>клеевая термоусадка</b> на конец: она не ползёт.</li>
+    <li>Клей только если не планируешь разбирать полку: эпоксидка или «Момент». ПВА к ABS не держит.</li>
+    <li>Средний пруток 3 в крайних опорах при люфте — 1 виток.</li>
+  </ul>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 5</span><h2>Разная длина: ставь каждый пруток по центру</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 230" role="img" aria-label="Вид сверху: прутки разной длины в глухих гнёздах">
+    <text x="20" y="22" class="muted">вид сверху, крайние опоры по бокам (масштаб по длине сжат)</text>
+    <rect class="leg" x="40" y="40" width="24" height="170"/><rect class="leg" x="576" y="40" width="24" height="170"/>
+    <!-- rods: longest touches both bottoms; shorter centred -->
+    <rect class="rod" x="48" y="52" width="544" height="16" rx="3"/>
+    <rect class="rod thin" x="54" y="84" width="532" height="14" rx="3"/>
+    <rect class="rod" x="48" y="114" width="544" height="16" rx="3"/>
+    <rect class="rod thin" x="56" y="146" width="528" height="14" rx="3"/>
+    <rect class="rod" x="52" y="176" width="536" height="16" rx="3"/>
+    <text x="320" y="64" text-anchor="middle" class="mono">самый длинный: до дна с обеих сторон</text>
+    <text x="320" y="96" text-anchor="middle" class="mono muted">короче на 1 см: по 5 мм с каждой стороны</text>
+    <path class="dim" d="M48 210 L54 210"/>
+    <text x="320" y="222" text-anchor="middle" class="muted">опору держат 5 гнёзд, она не перекосится. Короткий пруток просто не дойдёт до дна гнезда</text>
+  </svg></div>
+  <p>Отметь середину каждого прутка и выставь их так, чтобы с обеих сторон в гнездо зашло поровну. Аккуратнее отпилить длинные по самому короткому ножовкой в стусле и снять фаску: тогда все прутки упираются в дно.</p>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 6</span><h2>Выставь внутреннюю опору бруском и затяни хомуты, когда ящик внутри</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 270" role="img" aria-label="Вид спереди на правый отсек: брусок на столе и ящик в пазах">
+    <text x="20" y="22" class="muted">вид спереди на правый отсек</text>
+    <line x1="20" y1="240" x2="620" y2="240" class="desk"/>
+    <!-- inner leg x 328..342 -> 120..148 ; end leg 536..552 -> 536..568 ; scale 2 px/mm from 268 -->
+    <rect class="leg" x="120" y="64" width="28" height="176"/>
+    <rect class="leg" x="536" y="64" width="32" height="176"/>
+    <text x="134" y="56" text-anchor="middle" class="mono">внутренняя</text>
+    <text x="552" y="56" text-anchor="middle" class="mono">крайняя</text>
+    <!-- rods across top -->
+    <rect class="rod" x="100" y="72" width="490" height="14" rx="3" opacity=".75"/>
+    <!-- drawer hanging z 26..88 -> y 203.6..116.8 (1.4 px/mm) -->
+    <rect class="acc" x="152" y="118" width="380" height="86" rx="3"/>
+    <polygon points="148,118 160,118 152,128" fill="var(--blue)"/><polygon points="536,118 524,118 532,128" fill="var(--blue)"/>
+    <text x="342" y="166" text-anchor="middle" class="blue">ящик вставлен</text>
+    <!-- gauge on desk -->
+    <rect x="148" y="228" width="388" height="12" fill="var(--ash)" opacity=".6"/>
+    <text x="342" y="226" text-anchor="middle" class="mono">bay_gauge 194 мм</text>
+    <!-- clamp screw -->
+    <circle cx="134" cy="66" r="7" fill="var(--ok)"/>
+    <path class="arrow" d="M80 40 L 126 62"/>
+    <text x="20" y="36" class="ok">затянуть здесь</text>
+    <text x="320" y="262" text-anchor="middle" class="muted">брусок задаёт низ, ящик — верх. Так опора не наклонится</text>
+  </svg></div>
+  <ul>
+    <li>Положи брусок на стол между опорами, вплотную к обеим, сначала спереди, потом сзади.</li>
+    <li><b>Вставь ящик</b> и только потом затяни винты M3 на хомутах внутренней опоры (передний и задний пруток).</li>
+    <li>Брусок лежит у пола, а паз ящика на высоте 8 см. Если опора чуть наклонилась, по бруску этого не видно, а ящик сразу начнёт тереть.</li>
+    <li>Проверь ход ящика до упора и обратно.</li>
+  </ul>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 7</span><h2>Натри паз ящика парафином</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 220" role="img" aria-label="Разрез паза опоры и фланца ящика, скос 45 градусов">
+    <text x="20" y="22" class="muted">разрез: паз в опоре и бортик ящика</text>
+    <!-- leg block with V channel -->
+    <polygon class="leg" points="380,40 520,40 520,200 380,200 380,150 330,100 330,60 380,60"/>
+    <!-- drawer wall + flange -->
+    <rect class="acc" x="200" y="60" width="20" height="140"/>
+    <polygon class="acc" points="220,60 326,60 326,70 276,120 220,120"/>
+    <line class="wax" x1="330" y1="100" x2="380" y2="150"/>
+    <path class="arrow" d="M470 140 L 372 128"/>
+    <text x="478" y="146" class="ok">скос 45° — сюда</text>
+    <text x="478" y="162" class="muted">свечка или сухая</text>
+    <text x="478" y="178" class="muted">PTFE-смазка</text>
+    <text x="210" y="214" text-anchor="middle" class="blue mono">стенка ящика</text>
+  </svg></div>
+  <p>Ящик висит на бортике, который лежит на скосе 45°. ABS по ABS со временем скрипит и стирается, особенно в слое 0.28. Пару раз проведи свечкой по скосу в обеих опорах, и ящик пойдёт мягко. Масло не нужно, на нём собирается пыль.</p>
+</section>
+
+<section class="step">
+  <div class="head"><span class="n">ШАГ 8</span><h2>Резиновая лента под ноги и метки на прутках</h2></div>
+  <div class="fig"><svg viewBox="0 0 640 210" role="img" aria-label="Лента под ногой опоры и карандашная метка положения опоры">
+    <text x="20" y="22" class="muted">нога опоры, вид сбоку</text>
+    <line x1="20" y1="170" x2="320" y2="170" class="desk"/>
+    <polygon class="leg" points="40,164 40,150 60,150 60,60 280,60 280,150 300,150 300,164"/>
+    <rect x="40" y="164" width="34" height="6" fill="var(--ok)"/><rect x="266" y="164" width="34" height="6" fill="var(--ok)"/>
+    <text x="170" y="196" text-anchor="middle" class="ok">силикон или EVA 1–2 мм под обе «ступни»</text>
+    <!-- marks -->
+    <text x="360" y="22" class="muted">метка положения внутренней опоры</text>
+    <rect class="rod" x="360" y="80" width="260" height="22" rx="4"/>
+    <rect class="leg" x="480" y="56" width="16" height="70"/>
+    <line x1="476" y1="72" x2="476" y2="110" stroke="var(--bad)" stroke-width="2.5"/>
+    <line x1="500" y1="72" x2="500" y2="110" stroke="var(--bad)" stroke-width="2.5"/>
+    <text x="488" y="146" text-anchor="middle" class="bad">карандаш с двух сторон</text>
+    <text x="488" y="162" text-anchor="middle" class="muted">на прутках 1 и 5</text>
+  </svg></div>
+  <ul>
+    <li><b>Лента под ноги.</b> Четыре опоры на одной раме и чуть повело ABS, вот и качание. Лента выравнивает и не даёт полке уехать, когда тянешь ящик.</li>
+    <li><b>Метки.</b> Когда всё выставлено и ящики ходят, обведи карандашом внутренние опоры на 1-м и 5-м прутке. Следующая сборка — без бруска, по меткам.</li>
+  </ul>
+  <p class="note">Если полка качается вбок, когда толкаешь монитор, можно натянуть сзади два тросика крест-накрест в центральном пролёте. Это на потом, если понадобится.</p>
+</section>
+
+<footer>DeskShelf v2.4b · внутренние опоры: гнёзда 20.2 / 19.3 / 20.4 / 19.3 / 20.2 (спереди назад) · отсек 194 мм</footer>
+</div>
