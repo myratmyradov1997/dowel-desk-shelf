@@ -23,19 +23,29 @@ Things that went wrong or are still open. Read before printing.
 - **Drawer stop tongue (fixed in v2.4c):** in earlier versions the slots around the stop tongue were cut only 0.5 mm into the
   2 mm side wall, so the tongue was not free and the drawer could not be pushed past the leg. The current STL cuts
   through the whole wall (checked by point probes in the model). If you have an older drawer STL, do not print it.
+- **Drawer stop tongue printed badly (fixed in v2.5c, found on a real print).** The v2.4c tongue lay along the wall between two
+  horizontal 1 mm slots: the wall over the upper slot and the tongue over the lower one were 43 mm bridges, printed as
+  "overhang wall" in mid-air, and sagged. v2.5c roots the tongue in the floor with a 45° pointed
+  top, so every layer stands on the one below. Lesson: check not only for bridges but where each island starts.
+  Print only the current `drawer_*.stl`.
 
 ## Printing
 
 - Legs and tiles are 244 mm long: they need a 245 × 200 mm bed. No Ender-3-size beds without splitting the parts.
 - ABS warps on long flat parts: enclosure, 105 °C bed, brim, do not open the door until the part cools.
 - A **power cut** killed a 6 h leg print at ~70 %. ABS cools and detaches, so resuming after a long break is pointless — restart.
+- `Err: MINTEMP / PRINTER HALTED` stopped a 6 h drawer print at 80 %. This is the printer, not the model: Marlin saw the
+  hotend thermistor read far below room temperature, i.e. an open circuit (wire at the moving head, connector, or the
+  thermistor itself). Check the reading cold, wiggle the head cable, reseat the connector before the next long print.
 - The 0.28 mm drawer slide is not yet tested; if it rubs, print the drawer at 0.20 mm, and use paraffin on the channel.
 
 ## Not verified yet
 
 - Load capacity and long-term creep of ABS legs under a 6 kg monitor. **No load rating.**
 - Whether the whole thing wobbles sideways (a crossed-cable brace is the fallback).
-- All accessories (MagSafe v3, Gridfinity, front-rod holders, storage, backlight) — CAD-checked only.
+- Accessories (Gridfinity, front-rod holders, storage, backlight) — CAD-checked only. MagSafe v3 is printed and works.
+- v2.5 wrap-around deck tiles: test print pending. They are 226 mm deep instead of 244, so the front-rod holders and the
+  backlight rail (made for the old tile edges) still have to be adapted.
 - Storage set is heavy (627 g, 28 h) and its hangers use the same bare rod-5 sections as the backlight brackets
   (x ≈ ±281…326): you cannot install both as they are.
 - Backlight rail needs the back 14 mm of the deck — the monitor stand must not sit at the very back edge.

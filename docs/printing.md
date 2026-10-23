@@ -25,11 +25,11 @@ parts, dry filament (60 °C, 4 h).
 | 0 | `fit_coupon_sockets`, `fit_coupon_slide_leg` + `fit_coupon_slide_drawer` | 1 each | any | ≈ 20 g / 1.5 h |
 | 1 | `leg_end_left_D20.4`, `leg_end_right_D20.4` | 1 each | grey | 106–110 g / 6.3–8.6 h each |
 | 2 | `leg_inner_left_*`, `leg_inner_right_*` (pick the variant) | 1 each | grey | 93 g / 5.6 h each |
-| 3 | `deck_tile_1`, `deck_tile_2`, `deck_tile_3` | 1 each | grey (tile 2 grey or blue) | 94–105 g / 4.4–5.9 h each |
+| 3 | `deck_tile_1`, `deck_tile_2`, `deck_tile_3` (dovetails) **or** 3 × `deck_tile_wrap_v2.5` (experimental) | 1 each / 3 | grey / blue | 94–105 g / 4.4–5.9 h each; wrap tile 105 g / 4.6 h |
 | 4 | `rod_clip_D19.8` (or `_D20.2`) | 2 | grey | small |
 | 5 | `bay_gauge` (194 mm spacer for assembly) | 1 | any | small |
-| 6 | `drawer_right` | 1 | blue | 199 g / 6.3 h (0.28) |
-| 7 | `drawer_left` (with a divider, printed in one piece) | 1 | blue | 220 g / 7.1 h (0.28) |
+| 6 | `drawer_right` (v2.5c) | 1 | blue | 199 g / 6.4 h (0.28) |
+| 7 | `drawer_left` (v2.5c, with a divider, printed in one piece) | 1 | blue | 220 g / 7.1 h (0.28) |
 | 8 | `laptop_dock` + `bookend` | 1 each | blue | 116 g / 5.2 h |
 | 9 | `macmini_stand` | 1 | blue | 64 g / 2.7 h |
 

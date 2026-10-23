@@ -9,6 +9,10 @@ Gridfinity inserts for the drawers, cable and USB-hub holders, cable tray and wa
 
 ![Shelf overview](images/shelf_overview.png)
 
+| ![Real build, night](images/photo_desk_night.jpg) | ![Real build, close-up](images/photo_shelf_closeup.jpg) |
+|---|---|
+| The real shelf under an LG 29" ultrawide (printed in grey ABS, LED strip behind) | Close-up: deck tile on the dowels and the MagSafe v3 mount on the front rod |
+
 > **Status: work in progress.** The design is fully modelled and checked in CAD (no interferences,
 > drawer travel simulated), but only part of it has been printed so far. See
 > [what is tested](#what-is-tested-and-what-is-not) before you commit 1.3 kg of filament.
@@ -18,7 +22,7 @@ Gridfinity inserts for the drawers, cable and USB-hub holders, cable tray and wa
 | | |
 |---|---|
 | Overall size | ≈ 1104 × 244 mm, deck surface at ≈ 118 mm above the desk |
-| Deck | 540 × 244 mm, three tiles joined by dovetails |
+| Deck | 540 × 244 mm, three tiles joined by dovetails (v2.5 wrap-around tiles: 540 × 226 mm, experimental) |
 | Clearance under the rods | 95 mm |
 | Drawers | 190 × 224 × 62 mm outside, 186 × 220 inside, 145 mm travel, stop + removable |
 | Dowels | 5 × Ø20 × 1100 mm, centres 50 mm apart, axis at 105 mm |
@@ -46,7 +50,7 @@ Gridfinity inserts for the drawers, cable and USB-hub holders, cable tray and wa
 | [`stl/05-front-rod`](stl/05-front-rod) | Plug holders (1/2/3 cables) and a USB-hub cradle under the front rod |
 | [`stl/06-storage`](stl/06-storage) | Cable tray under the deck, tool rail, headphone stand (experimental, heavy) |
 | [`stl/07-backlight`](stl/07-backlight) | LED rail for wall backlight + ESP32-C3 Super Mini box |
-| [`cad`](cad) | Fusion 360 archives (`.f3d`) and a STEP of the shelf. **`all_in_one.f3d`** — everything in one document, one component per set (toggle visibility) |
+| [`cad`](cad) | Fusion 360 archives (`.f3d`) and STEP files of the shelf (`shelf_v2_5c` is current, `shelf_v2_4c` has the dovetail tiles). **`all_in_one.f3d`** — everything in one document, one component per set (toggle visibility) |
 | [`source/fusion`](source/fusion) | Fusion 360 API scripts that generate everything (fully parametric) |
 | [`source/orca`](source/orca) | OrcaSlicer profiles (ABS, Ghost 6) and the CLI slicing helper |
 | [`docs`](docs) | [Printing](docs/printing.md) · [Assembly](docs/assembly.md) · [Known issues](docs/known-issues.md) · [Accessories](docs/accessories.md) |
@@ -60,8 +64,27 @@ The legs are the only parts that depend on your dowels.
   - `leg_inner_*_D20.4` — all five sockets D20.4, for dowels that are really 20.0 mm. Start here.
   - `leg_inner_*_fitted_20.2-19.3-20.4-19.3-20.2` — the author's set: three good rods (20.0–20.1) in positions 1/3/5,
     two thin ones (19.0) in positions 2/4. Use as an example, or regenerate with your own sizes
-    (`SOCK_INNER` in `source/fusion/deskshelf_v2_4c.py`).
+    (`SOCK_INNER` in `source/fusion/deskshelf_v2_5c.py`).
 - `rod_clip_D19.8` (snug on 20.0 rods) or `rod_clip_D20.2` (for fatter rods).
+
+## What changed in v2.5 / v2.5c (2026-10-23)
+
+- **Drawer stop tongue grows up from the floor (v2.5c).** The old tongue (v2.4c) ran along the side wall between two
+  horizontal 1 mm slots, so the slicer printed the wall above the slot and the tongue above the lower slot as 43 mm
+  bridges in mid-air; on the first real drawer this area came out badly. Now the tongue is rooted in the floor, 20 mm wide, with two vertical slots and a 45° pointed top under a 45° pointed arch; the nub moved
+  12 mm up (z 22–36) to stay near the free end. A layer-by-layer check of the G-code finds no bridges and no plastic
+  starting over air (old: 84–85 mm² unsupported per bridge layer). Ramp and 145 mm travel are unchanged.
+  `stl/01-shelf/drawer_*.stl` are the v2.5c drawers.
+- **Wrap-around deck tiles (v2.5, experimental).** Each tile rolls around the front and the back rod: three hooks at the front
+  (hook on tilted, rotate down) and three D19.8 snap rings at the back. No dovetails; 179.5 × 226 mm, printed face down
+  without supports (45° chamfer at the rolled edges). `stl/01-shelf/deck_tile_wrap_v2.5.stl`, print 3×.
+  **A test tile is not printed yet.** The front-rod accessories and the backlight rail were designed for the old tiles.
+
+| ![tongue](images/drawer_stop_tongue_v2.5c.png) | ![tongue G-code](images/drawer_tongue_gcode_compare.png) |
+|---|---|
+| v2.5c drawer: stop tongue rooted in the floor, nub near the free end | Side wall layer by layer: v2.4c and v2.5c |
+| ![tile mounting](images/tile_wrap_v2.5_mounting.png) | ![tile underside](images/tile_wrap_v2.5_underside.png) |
+| v2.5 tile: hooked on the front rod, rotated down onto the back rod | Underside: front hooks, back snap rings, saddles, ribs |
 
 ## Pictures
 
@@ -79,9 +102,11 @@ The legs are the only parts that depend on your dowels.
 | Part | State |
 |---|---|
 | Socket rings, drawer-slide coupons (channel variant B) | ✅ printed, used to pick the clearances |
-| Deck tile 1, end leg (right) | ✅ printed in ABS |
-| Inner legs, drawers, other tiles, modules | ⏳ not printed yet — CAD-checked only |
-| MagSafe v3, all accessories | 🧪 CAD-checked only |
+| All four legs, deck tiles 1 and 3 (dovetail version), rod clips, bay gauge | ✅ printed in ABS, assembled (see photos) |
+| MagSafe v3 mount | ✅ printed and in use |
+| Drawer v2.4c | ❌ first right drawer stopped at 80 % (printer thermistor fault), the stop tongue printed badly → fixed in v2.5c |
+| Drawers v2.5c, wrap-around tiles v2.5, modules | ⏳ not printed yet — CAD- and G-code-checked only |
+| Other accessories | 🧪 CAD-checked only |
 | Load capacity, long-term creep of ABS on wood | ❌ not tested |
 
 Read [known issues](docs/known-issues.md) — there are real lessons there (crooked dowels, 1 cm length differences,

@@ -8,7 +8,8 @@ Before running, change the `OUT` path at the top of each script (it points to th
 | Script | Builds |
 |---|---|
 | `deskshelf_v2_4c.py` | The whole shelf: legs, tiles, drawers, clips, gauge, test coupons, interference and drawer-travel checks, STL/STEP/F3D export. Parameters at the top: rod positions `YS`, end-leg socket `R`, inner sockets `SOCK_INNER`, clip bore `CLIP_RI`, drawer and channel sizes. Without an open `balka` document the rods are built as D20 × 1100 cylinders. |
-| `print_ready_v2_4c.py` | Turns the exported STL into print orientation (plain Python + numpy). |
+| `deskshelf_v2_5c.py` | **Current.** As v2.4c, plus wrap-around deck tiles (v2.5, experimental) and the drawer stop tongue rooted in the floor (v2.5c, `TG_*` parameters). |
+| `print_ready_v2_4c.py`, `print_ready_v2_5c.py` | Turn the exported STL into print orientation (plain Python + numpy). |
 | `deskshelf_modules_v2.py`, `deskshelf_modules_v2_on_v2_3.py`, `print_ready_modules_v2.py` | MacBook dock, bookend, Mac mini stand. |
 | `magsafe_mount_v3.py`, `magsafe_v3_print_ready.py` | MagSafe mount with printed M8 screw. |
 | `accessories/*` | Gridfinity, front-rod holders, storage, backlight. They import an assembly `.f3d` (see `SRC` at the top) — point it to a file in `../cad`. |
